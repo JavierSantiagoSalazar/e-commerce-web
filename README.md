@@ -639,28 +639,7 @@ This frontend application is part of a complete microservices solution. Backend 
 - Use dependency injection
 - Document public methods
 
-## 📝 License
-
-This project is part of a technical assessment and is intended for demonstration purposes.
-
 ## 📧 Contact
 
 **Developer**: Javier Santiago Salazar
 **Repository**: https://github.com/JavierSantiagoSalazar/e-commerce-web
-
-## 🙏 Acknowledgments
-
-- Angular team for the excellent framework
-- Spring Boot team for the robust backend framework
-- JSON:API specification authors
-
----
-
-**Note**: This project was developed as part of a technical assessment demonstrating:
-- Modern Angular development practices
-- Microservices architecture understanding
-- Clean code principles
-- API integration capabilities
-- Comprehensive documentation skills
-
-For questions or issues, please open an issue on GitHub or contact the development team.
