@@ -40,11 +40,25 @@ export class ProductViewComponent implements OnInit {
     this.productService.getProductById(Number(this.productId)).subscribe({
       next: (product) => {
         this.product = product;
+
+        // Cargar inventario desde localStorage si existe
+        const savedInventory = this.loadInventoryFromLocalStorage(Number(this.productId));
+        if (savedInventory) {
+          this.product.inventory = savedInventory;
+        }
+
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Error loading product:', err);
-        this.error = 'Error al cargar el producto. El producto no existe o ha sido eliminado.';
+
+        if (err.error?.errors && err.error.errors.length > 0) {
+          const backendError = err.error.errors[0];
+          this.error = backendError.detail || backendError.title || 'Error al cargar el producto.';
+        } else {
+          this.error = 'Error al cargar el producto. El producto no existe o ha sido eliminado.';
+        }
+
         this.isLoading = false;
       }
     });
@@ -88,12 +102,23 @@ export class ProductViewComponent implements OnInit {
             location: inventory.location,
             lastUpdated: inventory.lastUpdated
           };
+
+          // Guardar en localStorage
+          this.saveInventoryToLocalStorage(Number(this.productId), this.product!.inventory);
+
           this.showInventoryModal = false;
           this.isLoading = false;
         },
         error: (err) => {
           console.error('Error creando inventario:', err);
-          this.error = 'Error al crear el inventario. Por favor, intenta de nuevo.';
+
+          if (err.error?.errors && err.error.errors.length > 0) {
+            const backendError = err.error.errors[0];
+            this.error = backendError.detail || backendError.title || 'Error al crear el inventario.';
+          } else {
+            this.error = 'Error al crear el inventario. Por favor, intenta de nuevo.';
+          }
+
           this.isLoading = false;
         }
       });
@@ -114,15 +139,43 @@ export class ProductViewComponent implements OnInit {
             location: inventory.location,
             lastUpdated: inventory.lastUpdated
           };
+
+          // Actualizar en localStorage
+          this.saveInventoryToLocalStorage(Number(this.productId), this.product!.inventory);
+
           this.showInventoryModal = false;
           this.isLoading = false;
         },
         error: (err) => {
           console.error('Error actualizando inventario:', err);
-          this.error = 'Error al actualizar el inventario. Por favor, intenta de nuevo.';
+
+          if (err.error?.errors && err.error.errors.length > 0) {
+            const backendError = err.error.errors[0];
+            this.error = backendError.detail || backendError.title || 'Error al actualizar el inventario.';
+          } else {
+            this.error = 'Error al actualizar el inventario. Por favor, intenta de nuevo.';
+          }
+
           this.isLoading = false;
         }
       });
     }
+  }
+
+  // Métodos para gestionar inventario en localStorage
+  private saveInventoryToLocalStorage(productId: number, inventory: any): void {
+    const key = `inventory_product_${productId}`;
+    localStorage.setItem(key, JSON.stringify(inventory));
+  }
+
+  private loadInventoryFromLocalStorage(productId: number): any {
+    const key = `inventory_product_${productId}`;
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : null;
+  }
+
+  private removeInventoryFromLocalStorage(productId: number): void {
+    const key = `inventory_product_${productId}`;
+    localStorage.removeItem(key);
   }
 }

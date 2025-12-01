@@ -34,10 +34,41 @@
     </app-product-card>
   </div>
 
+  <!-- Pagination Info -->
   <div class="pagination-info" *ngIf="!isLoading && !error && products.length > 0">
-    <p>Mostrando {{ products.length }} de {{ totalElements }} productos</p>
+    <p>Mostrando {{ products.length }} de {{ totalElements }} productos (Página {{ currentPage + 1 }} de {{ totalPages }})</p>
   </div>
 
+  <!-- Pagination Controls -->
+  <div class="pagination-container" *ngIf="!isLoading && !error && totalPages > 1">
+    <button
+      class="pagination-btn"
+      [disabled]="currentPage === 0"
+      (click)="onPageChange(currentPage - 1)">
+      <span class="material-symbols-outlined">chevron_left</span>
+      Anterior
+    </button>
+
+    <div class="pagination-pages">
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-page"
+        [class.active]="page === currentPage"
+        (click)="onPageChange(page)">
+        {{ page + 1 }}
+      </button>
+    </div>
+
+    <button
+      class="pagination-btn"
+      [disabled]="currentPage >= totalPages - 1"
+      (click)="onPageChange(currentPage + 1)">
+      Siguiente
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+  </div>
+
+  <!-- Empty State -->
   <div class="empty-state" *ngIf="!isLoading && !error && products.length === 0">
     <span class="material-symbols-outlined empty-icon">inventory_2</span>
     <h3>No hay productos</h3>

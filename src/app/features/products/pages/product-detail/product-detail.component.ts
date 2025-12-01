@@ -39,7 +39,14 @@ export class ProductDetailComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading product:', err);
-        this.error = 'Error al cargar el producto. El producto no existe o ha sido eliminado.';
+
+        if (err.error?.errors && err.error.errors.length > 0) {
+          const backendError = err.error.errors[0];
+          this.error = backendError.detail || backendError.title || 'Error al cargar el producto.';
+        } else {
+          this.error = 'Error al cargar el producto. El producto no existe o ha sido eliminado.';
+        }
+
         this.isLoading = false;
       }
     });
@@ -56,7 +63,14 @@ export class ProductDetailComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al actualizar producto:', err);
-        this.error = 'Error al actualizar el producto. Por favor, intenta de nuevo.';
+
+        if (err.error?.errors && err.error.errors.length > 0) {
+          const backendError = err.error.errors[0];
+          this.error = backendError.detail || backendError.title || 'Error al actualizar el producto.';
+        } else {
+          this.error = 'Error al actualizar el producto. Por favor, intenta de nuevo.';
+        }
+
         this.isLoading = false;
       }
     });

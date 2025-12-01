@@ -30,7 +30,15 @@ export class ProductNewComponent {
       },
       error: (err) => {
         console.error('Error al crear producto:', err);
-        this.error = 'Error al crear el producto. Por favor, intenta de nuevo.';
+
+        // Extraer mensaje del backend si existe
+        if (err.error?.errors && err.error.errors.length > 0) {
+          const backendError = err.error.errors[0];
+          this.error = backendError.detail || backendError.title || 'Error al crear el producto.';
+        } else {
+          this.error = 'Error al crear el producto. Por favor, intenta de nuevo.';
+        }
+
         this.isLoading = false;
       }
     });

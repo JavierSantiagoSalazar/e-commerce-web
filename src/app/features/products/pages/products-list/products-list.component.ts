@@ -42,7 +42,14 @@ export class ProductsListComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading products:', err);
-        this.error = 'Error al cargar los productos. Por favor, verifica que el servidor esté corriendo.';
+
+        if (err.error?.errors && err.error.errors.length > 0) {
+          const backendError = err.error.errors[0];
+          this.error = backendError.detail || backendError.title || 'Error al cargar los productos.';
+        } else {
+          this.error = 'Error al cargar los productos. Por favor, verifica que el servidor esté corriendo.';
+        }
+
         this.isLoading = false;
       }
     });
@@ -57,6 +64,35 @@ export class ProductsListComponent implements OnInit {
     this.loadProducts();
   }
 
+  getPageNumbers(): number[] {
+    const maxPagesToShow = 5;
+    const pages: number[] = [];
+
+    if (this.totalPages <= maxPagesToShow) {
+      // Mostrar todas las páginas si son pocas
+      for (let i = 0; i < this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Mostrar páginas alrededor de la página actual
+      let startPage = Math.max(0, this.currentPage - 2);
+      let endPage = Math.min(this.totalPages - 1, this.currentPage + 2);
+
+      // Ajustar si estamos cerca del inicio o fin
+      if (this.currentPage < 2) {
+        endPage = Math.min(maxPagesToShow - 1, this.totalPages - 1);
+      } else if (this.currentPage > this.totalPages - 3) {
+        startPage = Math.max(0, this.totalPages - maxPagesToShow);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+    }
+
+    return pages;
+  }
+
   onDeleteProduct(productId: number): void {
     this.isLoading = true;
     this.error = '';
@@ -64,11 +100,23 @@ export class ProductsListComponent implements OnInit {
     this.productService.deleteProduct(productId).subscribe({
       next: () => {
         console.log('Producto eliminado exitosamente');
+
+        // Limpiar inventario del localStorage
+        const key = `inventory_product_${productId}`;
+        localStorage.removeItem(key);
+
         this.loadProducts();
       },
       error: (err) => {
         console.error('Error al eliminar producto:', err);
-        this.error = 'Error al eliminar el producto. Por favor, intenta de nuevo.';
+
+        if (err.error?.errors && err.error.errors.length > 0) {
+          const backendError = err.error.errors[0];
+          this.error = backendError.detail || backendError.title || 'Error al eliminar el producto.';
+        } else {
+          this.error = 'Error al eliminar el producto. Por favor, intenta de nuevo.';
+        }
+
         this.isLoading = false;
       }
     });
