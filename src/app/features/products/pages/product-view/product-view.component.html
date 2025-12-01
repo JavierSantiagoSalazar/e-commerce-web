@@ -1,0 +1,123 @@
+<div class="page-container" *ngIf="isLoading">
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando producto...</p>
+  </div>
+</div>
+
+<div class="page-container" *ngIf="error && !isLoading">
+  <div class="error-container">
+    <span class="material-symbols-outlined">error</span>
+    <p>{{ error }}</p>
+    <button class="btn-primary" (click)="goBack()">Volver al listado</button>
+  </div>
+</div>
+
+<div class="page-container" *ngIf="product && !isLoading && !error">
+  <div class="page-header">
+    <button class="btn-back" (click)="goBack()">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <h1 class="page-title">Detalle del Producto</h1>
+  </div>
+
+  <div class="product-view">
+    <div class="product-image-section">
+      <div class="product-image-main">
+        <img [src]="product.imageUrl" [alt]="product.productName">
+      </div>
+    </div>
+
+    <div class="product-info-section">
+      <div class="product-header">
+        <span class="product-category-badge">{{ product.category }}</span>
+        <span class="product-brand-text">{{ product.brand }}</span>
+      </div>
+
+      <h2 class="product-title">{{ product.productName }}</h2>
+
+      <div class="product-price-section">
+        <span class="price-label">Precio</span>
+        <span class="price-amount">$ {{ product.price | number:'1.0-0' }}</span>
+      </div>
+
+      <div class="product-description-section">
+        <h3 class="section-title">Descripción</h3>
+        <p class="product-description">{{ product.description }}</p>
+      </div>
+
+      <div class="product-details-grid">
+        <div class="detail-item">
+          <span class="detail-label">Categoría</span>
+          <span class="detail-value">{{ product.category }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Marca</span>
+          <span class="detail-value">{{ product.brand }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">ID del Producto</span>
+          <span class="detail-value">#{{ product.id }}</span>
+        </div>
+      </div>
+
+      <div class="inventory-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <span class="material-symbols-outlined">inventory_2</span>
+            Inventario
+          </h3>
+          <button class="btn-inventory" (click)="openInventoryModal()">
+            <span class="material-symbols-outlined">
+              {{ product.inventory ? 'edit' : 'add' }}
+            </span>
+            {{ product.inventory ? 'Actualizar Stock' : 'Crear Inventario' }}
+          </button>
+        </div>
+
+        <div class="inventory-info" *ngIf="product.inventory">
+          <div class="inventory-item">
+            <span class="inventory-label">Cantidad en Stock</span>
+            <span class="inventory-value stock" [class.low-stock]="product.inventory.quantity < 10">
+              {{ product.inventory.quantity }}
+            </span>
+          </div>
+          <div class="inventory-item">
+            <span class="inventory-label">Ubicación</span>
+            <span class="inventory-value">{{ product.inventory.location }}</span>
+          </div>
+          <div class="inventory-item full-width">
+            <span class="inventory-label">Última Actualización</span>
+            <span class="inventory-value">{{ product.inventory.lastUpdated | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+
+        <div class="inventory-empty" *ngIf="!product.inventory">
+          <span class="material-symbols-outlined">package_2</span>
+          <p>Este producto aún no tiene inventario registrado</p>
+          <small>Haz clic en "Crear Inventario" para comenzar a gestionar el stock</small>
+        </div>
+      </div>
+
+      <div class="product-actions">
+        <button class="btn-secondary" (click)="goBack()">
+          <span class="material-symbols-outlined">arrow_back</span>
+          Volver
+        </button>
+        <button class="btn-primary" (click)="editProduct()">
+          <span class="material-symbols-outlined">edit</span>
+          Editar Producto
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Inventory Modal -->
+<app-inventory-modal
+  [isOpen]="showInventoryModal"
+  [isCreating]="isCreatingInventory"
+  [currentInventory]="product?.inventory"
+  (submitted)="onInventorySubmit($event)"
+  (cancelled)="closeInventoryModal()">
+</app-inventory-modal>

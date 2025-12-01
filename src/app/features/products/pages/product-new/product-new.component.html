@@ -1,0 +1,23 @@
+<div class="page-container">
+  <div class="page-header">
+    <button class="btn-back" routerLink="/products" [disabled]="isLoading">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <h1 class="page-title">Nuevo Producto</h1>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    <span class="material-symbols-outlined">error</span>
+    <p>{{ error }}</p>
+  </div>
+
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-spinner"></div>
+    <p>Creando producto...</p>
+  </div>
+
+  <app-product-form
+    (formSubmit)="onFormSubmit($event)"
+    (formCancel)="onFormCancel()">
+  </app-product-form>
+</div>

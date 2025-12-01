@@ -1,0 +1,41 @@
+<div class="product-card">
+  <div class="product-image">
+    <img
+      [src]="getImageUrl()"
+      [alt]="product.productName"
+      (error)="onImageError($event)">
+    <span class="product-category">{{ product.category }}</span>
+  </div>
+
+  <div class="product-info">
+    <span class="product-brand">{{ product.brand }}</span>
+    <h3 class="product-name">{{ product.productName }}</h3>
+    <p class="product-price">$ {{ product.price | number:'1.0-0' }}</p>
+  </div>
+
+  <div class="product-actions">
+    <button class="btn-view" (click)="viewDetails()">
+      <span class="material-symbols-outlined">visibility</span>
+      Ver
+    </button>
+    <button class="btn-edit" (click)="editProduct()">
+      <span class="material-symbols-outlined">edit</span>
+      Editar
+    </button>
+    <button class="btn-delete" (click)="deleteProduct()">
+      <span class="material-symbols-outlined">delete</span>
+      Eliminar
+    </button>
+  </div>
+</div>
+
+<app-confirm-modal
+  [isOpen]="showDeleteModal"
+  title="Eliminar Producto"
+  [message]="getDeleteMessage()"
+  confirmText="Eliminar"
+  cancelText="Cancelar"
+  confirmButtonClass="danger"
+  (confirmed)="onConfirmDelete()"
+  (cancelled)="onCancelDelete()">
+</app-confirm-modal>

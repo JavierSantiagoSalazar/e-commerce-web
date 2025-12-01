@@ -1,0 +1,100 @@
+<div class="modal-backdrop" *ngIf="isOpen" (click)="onBackdropClick($event)">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2 class="modal-title">{{ isCreating ? 'Crear Inventario' : 'Actualizar Inventario' }}</h2>
+      <button class="btn-close" (click)="onCancel()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form *ngIf="isCreating" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="quantity">Cantidad Inicial</label>
+          <input
+            type="number"
+            id="quantity"
+            [(ngModel)]="quantity"
+            name="quantity"
+            min="0"
+            required
+            placeholder="Ej: 100">
+        </div>
+
+        <div class="form-group">
+          <label for="location">Ubicación</label>
+          <input
+            type="text"
+            id="location"
+            [(ngModel)]="location"
+            name="location"
+            required
+            placeholder="Ej: Warehouse A">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" (click)="onCancel()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Crear Inventario
+          </button>
+        </div>
+      </form>
+
+      <form *ngIf="!isCreating" (ngSubmit)="onSubmit()">
+        <div class="current-info">
+          <div class="info-item">
+            <span class="label">Cantidad Actual:</span>
+            <span class="value">{{ currentInventory?.quantity || 0 }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Ubicación:</span>
+            <span class="value">{{ currentInventory?.location }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="quantityChange">Cambio de Cantidad</label>
+          <input
+            type="number"
+            id="quantityChange"
+            [(ngModel)]="quantityChange"
+            name="quantityChange"
+            required
+            placeholder="Ej: 10 para agregar, -5 para restar">
+          <small class="help-text">
+            Usa números positivos para agregar stock y negativos para reducir (ventas)
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="reason">Razón</label>
+          <select id="reason" [(ngModel)]="reason" name="reason" required>
+            <option value="PURCHASE">Compra / Agregar Stock</option>
+            <option value="SALE">Venta</option>
+            <option value="RETURN">Devolución</option>
+            <option value="DAMAGE">Daño / Pérdida</option>
+            <option value="ADJUSTMENT">Ajuste de Inventario</option>
+          </select>
+        </div>
+
+        <div class="preview-result" *ngIf="quantityChange !== 0">
+          <span class="label">Nueva cantidad:</span>
+          <span class="value" [class.positive]="quantityChange > 0" [class.negative]="quantityChange < 0">
+            {{ (currentInventory?.quantity || 0) + quantityChange }}
+          </span>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" (click)="onCancel()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Actualizar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

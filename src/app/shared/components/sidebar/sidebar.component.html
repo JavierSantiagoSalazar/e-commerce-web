@@ -1,0 +1,36 @@
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <span class="material-symbols-outlined">inventory_2</span>
+    </div>
+    <div class="logo-text">
+      <span class="logo-name">StockPro</span>
+      <span class="logo-subtitle">Gestión de inventario</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <h3 class="nav-section-title">PRINCIPAL</h3>
+    <ul class="nav-list">
+      <li *ngFor="let item of navItems">
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          class="nav-item"
+          [class.active]="item.active">
+          <span class="material-symbols-outlined nav-icon">{{ item.icon }}</span>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- User Section (bottom) -->
+  <div class="sidebar-user">
+    <div class="user-avatar">
+      <div class="avatar-circle">
+        <span class="material-symbols-outlined">person</span>
+      </div>
+    </div>
+  </div>
+</aside>

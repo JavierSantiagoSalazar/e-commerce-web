@@ -1,0 +1,90 @@
+<div class="product-form">
+  <div class="form-section">
+    <h2 class="section-title">Información General</h2>
+
+    <div class="form-group">
+      <label class="form-label">Nombre del Producto <span class="required">*</span></label>
+      <input
+        type="text"
+        [(ngModel)]="formData.productName"
+        placeholder="Ej: iPhone 15 Pro Max"
+        class="form-input">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Descripción <span class="required">*</span></label>
+      <textarea
+        [(ngModel)]="formData.description"
+        placeholder="Describe las características del producto..."
+        class="form-textarea"
+        rows="4"></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Categoría <span class="required">*</span></label>
+        <input
+          type="text"
+          [(ngModel)]="formData.category"
+          placeholder="Ej: Electronics"
+          class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Marca <span class="required">*</span></label>
+        <input
+          type="text"
+          [(ngModel)]="formData.brand"
+          placeholder="Ej: Apple"
+          class="form-input">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h2 class="section-title">Precio</h2>
+
+    <div class="form-group">
+      <label class="form-label">Precio (COP) <span class="required">*</span></label>
+      <div class="input-with-prefix">
+        <span class="input-prefix">$</span>
+        <input
+          type="number"
+          [(ngModel)]="formData.price"
+          placeholder="0"
+          class="form-input with-prefix">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h2 class="section-title">Imagen del Producto</h2>
+
+    <div class="form-group">
+      <label class="form-label">URL de la imagen <span class="required">*</span></label>
+      <input
+        type="url"
+        [(ngModel)]="formData.imageUrl"
+        placeholder="https://ejemplo.com/imagen.jpg"
+        class="form-input">
+    </div>
+
+    <div class="image-preview" *ngIf="formData.imageUrl">
+      <img [src]="formData.imageUrl" alt="Preview" (error)="formData.imageUrl = ''">
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="onCancel()">
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      class="btn-submit"
+      (click)="onSubmit()"
+      [disabled]="!isFormValid()">
+      <span class="material-symbols-outlined">save</span>
+      Guardar Producto
+    </button>
+  </div>
+</div>

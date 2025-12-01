@@ -1,0 +1,41 @@
+<div class="page-container" *ngIf="isLoading && !product">
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando producto...</p>
+  </div>
+</div>
+
+<div class="page-container" *ngIf="error && !product && !isLoading">
+  <div class="error-container">
+    <span class="material-symbols-outlined">error</span>
+    <p>{{ error }}</p>
+    <button class="btn-primary" (click)="onFormCancel()">Volver al listado</button>
+  </div>
+</div>
+
+<div class="page-container" *ngIf="product && !isLoading">
+  <div class="page-header">
+    <button class="btn-back" routerLink="/products">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <h1 class="page-title">Editar Producto</h1>
+  </div>
+
+  <app-product-form
+    [product]="product"
+    (formSubmit)="onFormSubmit($event)"
+    (formCancel)="onFormCancel()">
+  </app-product-form>
+
+  <div class="error-message" *ngIf="error">
+    <span class="material-symbols-outlined">error</span>
+    <p>{{ error }}</p>
+  </div>
+</div>
+
+<div class="loading-overlay" *ngIf="isLoading && product">
+  <div class="loading-content">
+    <div class="spinner"></div>
+    <p>Actualizando producto...</p>
+  </div>
+</div>

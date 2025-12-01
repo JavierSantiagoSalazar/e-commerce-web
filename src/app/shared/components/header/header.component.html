@@ -1,0 +1,20 @@
+<header class="header">
+  <div class="header-search">
+    <app-search-bar></app-search-bar>
+  </div>
+
+  <div class="header-actions">
+    <button class="header-icon-btn notification-btn">
+      <span class="material-symbols-outlined icon">notifications</span>
+      <span class="notification-badge" *ngIf="notificationCount > 0">
+        {{ notificationCount }}
+      </span>
+    </button>
+
+    <button class="header-user">
+      <div class="user-avatar">
+        <span class="material-symbols-outlined">account_circle</span>
+      </div>
+    </button>
+  </div>
+</header>
