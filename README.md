@@ -312,7 +312,7 @@ http-server -p 8080
 
 ### Running Tests
 
-The project is configured with Jasmine and Karma for testing:
+The project is configured with Jasmine and Karma for testing, base comes:
 
 ```bash
 npm test
@@ -347,8 +347,6 @@ The following testing strategy should be implemented:
 #### **Recommended Testing Tools**
 - **Jasmine**: Unit test framework (already configured)
 - **Karma**: Test runner (already configured)
-- **Cypress/Playwright**: E2E testing framework
-- **Jest**: Alternative to Jasmine (optional migration)
 - **Testing Library**: Component testing utilities
 
 #### **Coverage Goals**
